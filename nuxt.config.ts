@@ -2,6 +2,18 @@ import AutoImport from "unplugin-auto-import/vite";
 import { NaiveUiResolver } from "unplugin-vue-components/resolvers";
 import Components from "unplugin-vue-components/vite";
 import pkg from "./package.json";
+import { getDeployPlatform } from './server/utils/platform'
+const deployPlatform = getDeployPlatform()
+
+const getNitroPreset = (p: typeof deployPlatform) => {
+  switch (p) {
+    case 'cloudflare': return 'cloudflare-pages'
+    case 'vercel': return 'vercel'
+    case 'netlify': return 'netlify'
+    default: return 'node-server' // self-host/本地开发
+  }
+}
+const nitroPreset = getNitroPreset(deployPlatform)
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 
@@ -18,9 +30,7 @@ const siteConfig = {
   version: pkg.version,
 };
 
-export default defineNuxtConfig({
-  // modules
-  modules: [
+const baseModules = [
     "@pinia/nuxt",
     "pinia-plugin-persistedstate",
     "@nuxt/eslint",
@@ -32,11 +42,22 @@ export default defineNuxtConfig({
     "nuxt-lodash",
     "@nuxtjs/i18n",
     '@nuxt/image',
-  ].concat(siteConfig.platform === "cloudflare" ? "@nuxthub/core" : ""),
+  ].concat(siteConfig.platform === "cloudflare" ? "@nuxthub/core" : "")
+
+const modules = deployPlatform === "cloudflare"
+  ? [...baseModules, "@nuxthub/core"]
+  : baseModules
+
+export default defineNuxtConfig({
+  // modules
+  modules,
   // ssr
   ssr: false,
   // devtools
   devtools: { enabled: true },
+  nitro: {
+    preset: nitroPreset,
+  },
   // app
   app: {
     rootAttrs: { id: "nuxt-app" },
@@ -94,13 +115,11 @@ export default defineNuxtConfig({
     apiKey: process.env.API_KEY,
     sitePassword: process.env.SITE_PASSWORD,
     siteSecretKey: process.env.SITE_SECRE_KEY || "site-status",
-    public: siteConfig,
+    public: {
+      ...siteConfig,
+      deployPlatform
+    },
     captchaToken: process.env.CAPTCHATOKEN || "https://captcha.blowswind.cn/",
-    platform: process.env.VERCEL ? 'vercel'
-        : process.env.NETLIFY ? 'netlify'
-        : process.env.CF_PAGES ? 'cloudflare-pages'
-        : process.env.CLOUDFLARE ? 'cloudflare-workers'
-        : 'self-hosted',
   },
   devServer: { port: 8566 },
   future: { compatibilityVersion: 4 },

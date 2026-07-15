@@ -195,7 +195,7 @@
               <n-text 
                 class="site-name"
               >
-                {{ platform in map && platform !== 'auto' && platform !== 'self-hosted' ? platform : '自建' }}
+                {{ platform in map && platform !== 'auto' && platform !== 'self-host' ? platform : '自建' }}
               </n-text>
             </n-flex>
           </n-flex>
@@ -217,9 +217,8 @@ import { Icon } from "#components";
 const map: Record<string, string> = {
   vercel: 'icon:vercel',
   netlify: 'icon:netlify',
-  'cloudflare-pages': 'icon:cloudflare',
-  'cloudflare-workers': 'icon:cloudflare',
-  'self-hosted': 'icon:server',
+  'cloudflare': 'icon:cloudflare',
+  'self-host': 'icon:server',
 }
 
 // 图标名称映射（根据你的图标库调整）
