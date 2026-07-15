@@ -1,0 +1,14 @@
+{
+    "title": "MOYUCF 站点监测",
+    "description": "一个简约的站点监测 | a simple site-status pages, power by uptimerobot",
+    "keywords": "站点监测,监测,监控",
+    "logo": "/favicon.ico",
+    "icp": "",
+    "countday": 60,
+    "showlink": true,
+    "captchatoken":"https://captcha.blowswind.cn/",
+    "password": 110122,
+    "secretkey": "site-status",
+    "apiurl": "https://api.uptimerobot.com/v2/",
+    "apikey": "u2218079-a227682ef142d84391593d5f"
+}
