@@ -188,4 +188,8 @@ export default defineNuxtConfig({
   image: {
     domains: ['image.blowswind.cn'],
   },
+  hub: {
+    compatibilityDate: '2024-11-11',
+    compatibilityFlags: ['nodejs_compat'],
+  },
 });
