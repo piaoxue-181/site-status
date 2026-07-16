@@ -216,8 +216,8 @@ import DOMPurify from 'dompurify'
 import { Icon } from "#components";
 
 const map: Record<string, string> = {
-  Vercel: 'icon:vercel',
-  Netlify: 'icon:netlify',
+  'Vercel': 'icon:vercel',
+  'Netlify': 'icon:netlify',
   'cloudflare': 'icon:cloudflare',
   'self-host': 'icon:server',
 }
