@@ -188,8 +188,10 @@ export default defineNuxtConfig({
   image: {
     domains: ['image.blowswind.cn'],
   },
-  hub: {
-    compatibilityDate: '2024-11-11',
-    compatibilityFlags: ['nodejs_compat'],
+  nitro: {
+    preset: 'cloudflare-pages',
+    cloudflare: {
+      compatibilityFlags: ['nodejs_compat'], // 👈 关键配置
+    },
   },
 });
