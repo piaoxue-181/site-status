@@ -32,7 +32,7 @@ const fetchSiteData = async (apiPath: string, signal?: AbortSignal) => {
       signal,
       onResponse({ response }) {
         const serverHeader = response.headers.get('server');
-        if (serverHeader || serverHeader === "Vercel" || serverHeader === "Netlify") {
+        if (serverHeader || serverHeader === "Vercel" || serverHeader === "Netlify" || serverHeader === "cloudflare") {
           console.log(serverHeader)
           statusStore.platform = serverHeader;
         }

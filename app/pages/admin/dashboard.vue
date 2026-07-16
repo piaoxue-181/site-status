@@ -194,9 +194,9 @@
               />
               <n-text 
                 class="site-name"
-                :style="'text-transform: capitalize'"
+                style="text-transform: capitalize"
               >
-                {{ platform in map && platform !== 'self-host' ? platform : '自建' }}
+                {{ statusStore.platform !== 'self-host' ? statusStore.platform : '自建' }}
               </n-text>
             </n-flex>
           </n-flex>
@@ -216,18 +216,18 @@ import DOMPurify from 'dompurify'
 import { Icon } from "#components";
 
 const map: Record<string, string> = {
-  vercel: 'icon:vercel',
-  netlify: 'icon:netlify',
+  Vercel: 'icon:vercel',
+  Netlify: 'icon:netlify',
+  'cloudflare': 'icon:cloudflare',
   'self-host': 'icon:server',
 }
 
 // 图标名称映射（根据你的图标库调整）
 const platformIcon = computed(() => {
   if (platform === "cloudflare") {
-    return 'icon:cloudflare'
-  } else {
-    return map[statusStore.platform] || 'icon:server'
+    statusStore.platform = 'cloudflare'
   }
+  return map[statusStore.platform] || 'icon:server'
 })
 
 const goTo = (url: string) => {
