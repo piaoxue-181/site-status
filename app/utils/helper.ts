@@ -32,7 +32,8 @@ const fetchSiteData = async (apiPath: string, signal?: AbortSignal) => {
       signal,
       onResponse({ response }) {
         const serverHeader = response.headers.get('server');
-        if (serverHeader) {
+        if (serverHeader || serverHeader === "Vercel" || serverHeader === "Netlify") {
+          console.log(serverHeader)
           statusStore.platform = serverHeader;
         }
       }
@@ -64,5 +65,5 @@ const fetchSiteData = async (apiPath: string, signal?: AbortSignal) => {
 };
 
 // 导出两个具体函数
-export const getSiteData = (signal?: AbortSignal) => fetchSiteData('/api/getMonitors', signal);
-export const getSiteDataDay = (signal?: AbortSignal) => fetchSiteData('/api/getMonitorsDay', signal);
+export const getSiteData = (signal?: AbortSignal) => fetchSiteData('https://sitestatusk.netlify.app/api/getMonitors', signal);
+export const getSiteDataDay = (signal?: AbortSignal) => fetchSiteData('https://sitestatusk.netlify.app/api/getMonitorsDay', signal);

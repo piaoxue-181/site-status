@@ -185,4 +185,7 @@ export default defineNuxtConfig({
       ],
     },
   },
+  image: {
+    domains: ['image.blowswind.cn'],
+  },
 });
