@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import type { MonitorsDataResult, SiteLangType, SiteType } from "~~/types/main";
+import type { MonitorsDataResult, SiteLangType, SiteType, platform } from "~~/types/main";
 
 export const useStatusStore = defineStore(
   "status",
@@ -14,8 +14,10 @@ export const useStatusStore = defineStore(
     const scrollTop = ref<number>(0);
     // 站点语言
     const siteLang = ref<SiteLangType>("zh-CN");
+    // 站点平台
+    const platform = ref<platform>("self-host")
 
-    return { loginStatus, siteStatus, siteData, scrollTop, siteLang };
+    return { loginStatus, siteStatus, siteData, scrollTop, siteLang, platform };
   },
   {
     persist: {

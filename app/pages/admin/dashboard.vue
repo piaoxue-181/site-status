@@ -194,8 +194,9 @@
               />
               <n-text 
                 class="site-name"
+                :style="'text-transform: capitalize'"
               >
-                {{ platform in map && platform !== 'auto' && platform !== 'self-host' ? platform : '自建' }}
+                {{ platform in map && platform !== 'self-host' ? platform : '自建' }}
               </n-text>
             </n-flex>
           </n-flex>
@@ -217,13 +218,16 @@ import { Icon } from "#components";
 const map: Record<string, string> = {
   vercel: 'icon:vercel',
   netlify: 'icon:netlify',
-  'cloudflare': 'icon:cloudflare',
   'self-host': 'icon:server',
 }
 
 // 图标名称映射（根据你的图标库调整）
 const platformIcon = computed(() => {
-  return map[platform] || 'icon:server'
+  if (platform === "cloudflare") {
+    return 'icon:cloudflare'
+  } else {
+    return map[statusStore.platform] || 'icon:server'
+  }
 })
 
 const goTo = (url: string) => {
@@ -265,7 +269,7 @@ const releases = ref<any[]>([]);
 const loading = ref(false);
 
 const githubApi = async (repoPath: string) => {
-  const url = `https://api.github.com/repos/${repoPath}/releases`;
+  const url = `https://api-github.blowswind.cn/api/repos/${repoPath}/releases`;
   try {
     const data = await $fetch(url, { timeout: 10000 });
     return data;

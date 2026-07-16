@@ -2,18 +2,6 @@ import AutoImport from "unplugin-auto-import/vite";
 import { NaiveUiResolver } from "unplugin-vue-components/resolvers";
 import Components from "unplugin-vue-components/vite";
 import pkg from "./package.json";
-import { getDeployPlatform } from './server/utils/platform'
-const deployPlatform = getDeployPlatform()
-
-const getNitroPreset = (p: typeof deployPlatform) => {
-  switch (p) {
-    case 'cloudflare': return 'cloudflare-pages'
-    case 'vercel': return 'vercel'
-    case 'netlify': return 'netlify'
-    default: return 'node-server' // self-host/本地开发
-  }
-}
-const nitroPreset = getNitroPreset(deployPlatform)
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 
@@ -30,7 +18,9 @@ const siteConfig = {
   version: pkg.version,
 };
 
-const baseModules = [
+export default defineNuxtConfig({
+  // modules
+  modules: [
     "@pinia/nuxt",
     "pinia-plugin-persistedstate",
     "@nuxt/eslint",
@@ -41,23 +31,12 @@ const baseModules = [
     "@vueuse/nuxt",
     "nuxt-lodash",
     "@nuxtjs/i18n",
-    '@nuxt/image',
-  ].concat(siteConfig.platform === "cloudflare" ? "@nuxthub/core" : "")
-
-const modules = deployPlatform === "cloudflare"
-  ? [...baseModules, "@nuxthub/core"]
-  : baseModules
-
-export default defineNuxtConfig({
-  // modules
-  modules,
+    "@nuxt/image"
+  ].concat(siteConfig.platform === "cloudflare" ? "@nuxthub/core" : ""),
   // ssr
   ssr: false,
   // devtools
   devtools: { enabled: true },
-  nitro: {
-    preset: nitroPreset,
-  },
   // app
   app: {
     rootAttrs: { id: "nuxt-app" },
@@ -117,7 +96,6 @@ export default defineNuxtConfig({
     siteSecretKey: process.env.SITE_SECRE_KEY || "site-status",
     public: {
       ...siteConfig,
-      deployPlatform
     },
     captchaToken: process.env.CAPTCHATOKEN || "https://captcha.blowswind.cn/",
   },

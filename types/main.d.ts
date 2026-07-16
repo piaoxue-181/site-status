@@ -1,6 +1,8 @@
 // site status
 export type SiteType = "loading" | "warn" | "error" | "unknown" | "normal";
 
+export type platform = "Vercel" | "Netlify" | "self-host";
+
 export interface SiteDaysStatus {
   // 日期
   date?: number;

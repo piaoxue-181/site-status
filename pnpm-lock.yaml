@@ -13838,11 +13838,11 @@ snapshots:
 
   unenv-nightly@2.0.0-20241218-183400-5d6aec3:
     dependencies:
-      defu: 6.1.4
-      mlly: 1.7.4
+      defu: 6.1.7
+      mlly: 1.8.2
       ohash: 1.1.4
       pathe: 1.1.2
-      ufo: 1.5.4
+      ufo: 1.6.4
 
   unenv@1.10.0:
     dependencies:

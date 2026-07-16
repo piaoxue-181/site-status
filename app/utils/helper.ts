@@ -21,58 +21,48 @@ export const sleep = (ms: number) =>
 /**
  * Get site data.
  */
-export const getSiteData = async (signal?: AbortSignal) => {
+// 公共请求函数
+const fetchSiteData = async (apiPath: string, signal?: AbortSignal) => {
   const statusStore = useStatusStore();
   try {
     statusStore.siteStatus = "loading";
-    const result = await $fetch("/api/getMonitors", { method: "POST", signal });
-    if (result.code !== 200 || !result.data) {
+
+    const data = await $fetch(apiPath, {
+      method: "POST",
+      signal,
+      onResponse({ response }) {
+        const serverHeader = response.headers.get('server');
+        if (serverHeader) {
+          statusStore.platform = serverHeader;
+        }
+      }
+    });
+
+    if (data.code !== 200 || !data.data) {
       throw new Error("Error to get site data");
     }
-    // 更改数据
-    const { status } = result.data;
+
+    const { status: statusData } = data.data;
     statusStore.$patch({
-      siteData: result.data,
+      siteData: data.data,
       siteStatus:
-        status.count === status.ok
+        statusData.count === statusData.ok
           ? "normal"
-          : status.count === status.error
+          : statusData.count === statusData.error
             ? "error"
             : "warn",
     });
   } catch (error) {
     if (!signal?.aborted) {
-      console.error("error to get site data", error);
+      console.error(`error to get site data from ${apiPath}`, error);
       statusStore.siteStatus = "unknown";
-      window.$message.error("站点数据获取失败，请重试");
+      if (typeof window !== 'undefined') {
+        window.$message?.error?.("站点数据获取失败，请重试");
+      }
     }
   }
 };
 
-export const getSiteDataDay = async (signal?: AbortSignal) => {
-  const statusStore = useStatusStore();
-  try {
-    statusStore.siteStatus = "loading";
-    const result = await $fetch("/api/getMonitorsDay", { method: "POST", signal });
-    if (result.code !== 200 || !result.data) {
-      throw new Error("Error to get site data");
-    }
-    // 更改数据
-    const { status } = result.data;
-    statusStore.$patch({
-      siteData: result.data,
-      siteStatus:
-        status.count === status.ok
-          ? "normal"
-          : status.count === status.error
-            ? "error"
-            : "warn",
-    });
-  } catch (error) {
-    if (!signal?.aborted) {
-      console.error("error to get site data", error);
-      statusStore.siteStatus = "unknown";
-      window.$message.error("站点数据获取失败，请重试");
-    }
-  }
-};
+// 导出两个具体函数
+export const getSiteData = (signal?: AbortSignal) => fetchSiteData('/api/getMonitors', signal);
+export const getSiteDataDay = (signal?: AbortSignal) => fetchSiteData('/api/getMonitorsDay', signal);
