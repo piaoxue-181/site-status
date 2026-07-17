@@ -1,2 +1,4 @@
-pages_build_output_dir = "dist"
+# wrangler.toml
+name = "site-status"                  # 你的项目名称
+pages_build_output_dir = "dist"       # 构建输出目录
 compatibility_flags = ["nodejs_compat"]
